@@ -4,10 +4,14 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "node scripts/dev.js",
+    "dev:client": "vite",
+    "dev:server": "npm --prefix server run dev",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "promote-user": "npm --prefix server run promote-user --",
+    "seed-user": "npm --prefix server run seed-user --"
   },
   "dependencies": {
     "react": "^19.2.6",

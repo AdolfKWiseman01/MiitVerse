@@ -1,12 +1,13 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 import { useAuth } from '../context/AuthContext'
 
-export default function Register() {
+export default function AdminLogin() {
   const navigate = useNavigate()
-  const { register } = useAuth()
-  const [form, setForm] = useState({ username: '', email: '', password: '' })
+  const location = useLocation()
+  const { login } = useAuth()
+  const [form, setForm] = useState({ email: '', password: '' })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -16,10 +17,17 @@ export default function Register() {
     setLoading(true)
 
     try {
-      await register(form)
-      navigate('/login')
+      const user = await login(form)
+
+      if (user.role !== 'admin') {
+        setError('This account is not allowed to access admin.')
+        return
+      }
+
+      const from = location.state?.from?.pathname || '/admin'
+      navigate(from, { replace: true })
     } catch (err) {
-      setError(err.message || 'Registration failed')
+      setError(err.message || 'Admin login failed')
     } finally {
       setLoading(false)
     }
@@ -28,17 +36,8 @@ export default function Register() {
   return (
     <div className="auth-page">
       <form className="auth-card" onSubmit={handleSubmit}>
-        <h1>Create account</h1>
-        <p>Join MiitVerse as a user account.</p>
-
-        <label>
-          Username
-          <input
-            value={form.username}
-            onChange={(event) => setForm({ ...form, username: event.target.value })}
-            required
-          />
-        </label>
+        <h1>Admin Login</h1>
+        <p>Use an admin account to enter the dashboard.</p>
 
         <label>
           Email
@@ -63,11 +62,11 @@ export default function Register() {
         {error && <p className="auth-error">{error}</p>}
 
         <button type="submit" disabled={loading}>
-          {loading ? 'Creating...' : 'Register'}
+          {loading ? 'Signing in...' : 'Enter Admin'}
         </button>
 
         <p>
-          Already have an account? <Link to="/login">Login</Link>
+          Not an admin? <Link to="/login">Go to regular login</Link>
         </p>
       </form>
     </div>
