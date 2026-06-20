@@ -84,7 +84,7 @@ export async function registerUser(req, res) {
       message: 'User registered successfully',
       user: serializeUser(result.records[0]),
     })
-  } catch (error) {
+  } catch {
     return res.status(500).json({ message: 'Registration failed' })
   } finally {
     await session.close()
@@ -139,7 +139,7 @@ export async function loginUser(req, res) {
         role: user.role,
       },
     })
-  } catch (error) {
+  } catch {
     return res.status(500).json({ message: 'Login failed' })
   } finally {
     await session.close()

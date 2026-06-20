@@ -1,7 +1,6 @@
 import cors from 'cors'
 import express from 'express'
 
-import { env } from './config/env.js'
 import authRoutes from './routes/authRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 
