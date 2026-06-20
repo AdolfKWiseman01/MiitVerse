@@ -1,4 +1,6 @@
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import { Link } from "react-router-dom";
 import "../App.css";
 
 function Home() {
@@ -26,14 +28,15 @@ function Home() {
           </p>
 
           <div className="hero-buttons">
-            <button className="gold-btn">Explore More</button>
-            <button className="outline-btn">Join Community</button>
+            <Link to="/feed" className="gold-btn">
+              Explore More
+            </Link>
+
+            <Link to="/register" className="outline-btn">
+              Join Community
+            </Link>
           </div>
         </div>
-
-        {/* <div className="hero-right">
-          <img src="/globe.png" alt="globe" />
-        </div> */}
       </section>
 
       {/* STATS */}
@@ -43,6 +46,9 @@ function Home() {
         <div>120+ News</div>
         <div>30+ Communities</div>
       </section>
+
+      {/* ✅ ADD THIS */}
+      <Footer />
 
     </div>
   );

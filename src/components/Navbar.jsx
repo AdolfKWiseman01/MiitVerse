@@ -1,31 +1,40 @@
+import { Link } from 'react-router-dom'
+
+import { useAuth } from '../context/useAuth'
+
 function Navbar() {
+  const { user, logout } = useAuth()
+
   return (
     <nav className="navbar">
       <div className="logo">
-  <img src="/miitLogo.png" alt="MIIT Logo" />
+        <img src="/miitLogo.png" alt="MIIT Logo" />
 
-  <div className="logo-text">
-    <h2>
-      Miit<span>Verse</span>
-    </h2>
+        <div className="logo-text">
+          <h2>
+            Miit<span>Verse</span>
+          </h2>
 
-    <p>Official Social Hub of MIIT</p>
-  </div>
-</div>
+          <p>Official Social Hub of MIIT</p>
+        </div>
+      </div>
+
       <ul>
-        <li>Home</li>
-        <li>About</li>
-        <li>News</li>
-        <li>Events</li>
-        <li>Community</li>
-        <li>Gallery</li>
-        <li>Contact</li>
-        <li>Login</li>
+        <li><Link to="/">Home</Link></li>
+        <li><Link to="/feed">Feed</Link></li>
+        <li><Link to="/login">Login</Link></li>
+        <li><Link to="/admin-login">Admin Login</Link></li>
+        <li><Link to="/register">Register</Link></li>
+        {user?.role === 'admin' && <li><Link to="/admin">Admin</Link></li>}
       </ul>
 
-      <button className="join-btn">Join Us</button>
+      {user ? (
+        <button className="join-btn" onClick={logout}>Logout</button>
+      ) : (
+        <Link className="join-btn" to="/register">Join Us</Link>
+      )}
     </nav>
   );
 }
 
-export default Navbar;
+export default Navbar

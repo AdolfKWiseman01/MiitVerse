@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 import { useAuth } from '../context/useAuth'
 
-export default function Login() {
+export default function AdminLogin() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { login } = useAuth()
   const [form, setForm] = useState({ email: '', password: '' })
   const [error, setError] = useState('')
@@ -18,9 +19,15 @@ export default function Login() {
     try {
       const user = await login(form)
 
-      navigate(user.role === 'admin' ? '/admin' : '/feed')
+      if (user.role !== 'admin') {
+        setError('This account is not allowed to access admin.')
+        return
+      }
+
+      const from = location.state?.from?.pathname || '/admin'
+      navigate(from, { replace: true })
     } catch (err) {
-      setError(err.message || 'Login failed')
+      setError(err.message || 'Admin login failed')
     } finally {
       setLoading(false)
     }
@@ -29,8 +36,8 @@ export default function Login() {
   return (
     <div className="auth-page">
       <form className="auth-card" onSubmit={handleSubmit}>
-        <h1>Login</h1>
-        <p>Use your account to access MiitVerse.</p>
+        <h1>Admin Login</h1>
+        <p>Use an admin account to enter the dashboard.</p>
 
         <label>
           Email
@@ -55,11 +62,11 @@ export default function Login() {
         {error && <p className="auth-error">{error}</p>}
 
         <button type="submit" disabled={loading}>
-          {loading ? 'Signing in...' : 'Login'}
+          {loading ? 'Signing in...' : 'Enter Admin'}
         </button>
 
         <p>
-          Need an account? <Link to="/register">Register</Link>
+          Not an admin? <Link to="/login">Go to regular login</Link>
         </p>
       </form>
     </div>
