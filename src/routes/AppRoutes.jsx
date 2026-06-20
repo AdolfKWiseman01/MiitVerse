@@ -19,7 +19,7 @@ export default function AppRoutes() {
       <Route
         path="/admin"
         element={(
-          <ProtectedRoute roles={['admin']}>
+          <ProtectedRoute roles={['admin']} redirectTo="/admin-login">
             <Admin />
           </ProtectedRoute>
         )}
